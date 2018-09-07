@@ -1,0 +1,31 @@
+versin: "3.4"
+service:
+        redis:
+                image: 
+        wordpress:
+                depends_on:
+                        - redis
+                image: wordpress
+                resta: always
+                environment: 
+                        WORDPRESS_DB_HOST: 
+                        WORDPRESS_DB_USER: "wpuser"
+                        WORDPRESS_DB_PASSWORD: "12345"
+                volumes:
+                        - /srv/docker/volumes/wordpress/:/var/www/html/
+                networks:
+                        - proxy
+                deploy:
+                        mode: global
+                        restart_policy:
+                                condition: on-failure
+                        labels:
+                                traefik.port: 80
+                                traefik.frontend.rule: "Host:web.jfbenito.lan"
+                                traefik.docker.network: 'proxy'
+networks:
+        proxy:
+                external: true
+
+                  
+                        
